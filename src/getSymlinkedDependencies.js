@@ -5,12 +5,14 @@ const isSymlink = dependency =>
 
 module.exports = directory => {
     const packageJson = require(`${directory}/package.json`);	
-    const dependencies = [	
-        ...Object.keys(packageJson.dependencies),	
-        ...Object.keys(packageJson.devDependencies),	
-    ];
-    const relativeInstalls = dependencies
-        .filter(name => name.startsWith('file') || name.startsWith('..'))
+    const dependencies = {
+        ...packageJson.dependencies,
+        ...packageJson.devDependencies,
+    };
+    
+    const relativeInstalls = Object.entries(dependencies)
+        .filter(dep => dep[1].startsWith('file') || dep[1].startsWith('..'))
+        .map(dep => dep[0])
     const inNodeModules = fs.readdirSync(`${directory}/node_modules`).filter(isSymlink)
     return relativeInstalls.concat(inNodeModules)
 }
