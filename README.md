@@ -28,3 +28,11 @@ This will ensure the `rn-ci.config.js` file is generated before `metro` is run:
     "postinstall": "metro-with-symlinks"
 }
 ```
+
+Add to `.gitignore`.
+This will prevent the generated config from being added to git:
+
+```
+# metro-with-symlinks
+rn-cli.config.js
+```
